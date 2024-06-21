@@ -1,31 +1,19 @@
-import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement } from "./slices/CounterSlice";
-import { getProducts } from "./slices/ProductsSlice";
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Counter from './Counter';
+import Products from './Products';
+import Header from './Header';
 function App() {
-  const state = useSelector(state => state);
-  const dispatch = useDispatch();
   return (
     <div className="App">
-      <h2>{state.counterSlice.count}</h2>
-      <button onClick={() => dispatch(increment())}>INCREMENT</button>
-      <button onClick={() => dispatch(decrement())}>DECREMENT</button>
-      <button onClick={() => getProducts(dispatch)}>FETCH Products</button>
-      {
-        state?.productsSlice?.loading ? (
-          <h4>Loading...</h4>
-        ) : (
-          <ul>
-            {
-              state?.productsSlice?.data?.map((item, index) => (
-                <li key={item.productId}>
-                  {item?.productName}
-                </li>
-              ))
-            }
-          </ul>
-        )
-      }
+      <Router>
+        <Header />
+        <Routes>
+          <Route path='/' element={<div>Home Page</div>} />
+          <Route path='/counter' element={<Counter />} />
+          <Route path='/products' element={<Products />} />
+          <Route path='*' element={<div>404</div>} />
+        </Routes>
+      </Router>
     </div>
   );
 }
