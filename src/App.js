@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useSelector, useDispatch } from "react-redux";
+import { increment, decrement } from "./slices/CounterSlice";
+import { getProducts } from "./slices/ProductsSlice";
 
 function App() {
+  const state = useSelector(state => state);
+  const dispatch = useDispatch();
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h2>{state.counterSlice.count}</h2>
+      <button onClick={() => dispatch(increment())}>INCREMENT</button>
+      <button onClick={() => dispatch(decrement())}>DECREMENT</button>
+      <button onClick={() => getProducts(dispatch)}>FETCH Products</button>
+      {
+        state?.productsSlice?.loading ? (
+          <h4>Loading...</h4>
+        ) : (
+          <ul>
+            {
+              state?.productsSlice?.data?.map((item, index) => (
+                <li key={item.productId}>
+                  {item?.productName}
+                </li>
+              ))
+            }
+          </ul>
+        )
+      }
     </div>
   );
 }
